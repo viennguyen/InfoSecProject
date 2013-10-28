@@ -1,13 +1,16 @@
-#include<stdio.h> 
+#include <stdio.h> 
 #include "sha1.c"
-//#include 
 #include "sha1.h"
 
-int main() 
+SHA1Context sha;
+
+int password_length;
+
+int main(int argc, char *argv[]) 
 {
-    SHA1Context sha;
+    password_length = atoi(argv[0]);
     
-    printf("Hello there ...\n");
+    printf("Length = " + password_length);    
     
     return 0;  
 }

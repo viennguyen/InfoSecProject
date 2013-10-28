@@ -12,9 +12,8 @@
  *
  */
 
-#include<stdio.h> 
+#include <stdio.h> 
 #include "sha1.c"
-//#include 
 #include "sha1.h"
 
 /*
