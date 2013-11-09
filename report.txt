@@ -1,0 +1,24 @@
+Improve of algorithm
+
+Run time for length is 6
+
+* Single thread
+- 1st version: 3.06 minutes
+- file3 for the first 3 characters + back tracking for the rest: 3.04 minutes
+- file3 + file3: 3.07 minutes
+
+Not much difference between back tracking and iteration. 
+
+* Multiple threads
+- file3 for the first 3 characters + back tracking for the rest: 1.46 minutes
+
+- Real password: run in server 110 minutes
+
+* Multiple instances (Same machine)
+
+
+* Multiple machines: 
+ 
+
+
+

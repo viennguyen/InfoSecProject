@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,13 +17,16 @@ public class sha1crack {
 	 */
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 		// TODO Auto-generated method stub
+		time = System.currentTimeMillis();
 		sha1crack sha = new sha1crack();
 		sha.run();
+		System.out.println("Loading time: " + (System.currentTimeMillis() - time) / 1000.0 + " seconds");
 	}
 
-	private long time;
+	private static long time;
 	private String target = "67ae1a64661ac8b4494666f58c4822408dd0a3e4"; //real target
-//	private String target = "429b2adadcbd158271ecaed1e1575baf120188f6"; //test target
+//	private String target = "e57a14bb5a3ccdc260d173d989d187d86d4aabfa"; //test target
+	
 	//Starts with 20 different characters
 	private char[] letters = new char[]{'Q', 'q', '@', 'W', 'w', '5', '%', '(', '8', '[', 
 										'=', '0', '}', 'i', 'I', '*', '+', '~', 'N', 'n'};
@@ -32,15 +37,18 @@ public class sha1crack {
 	private ArrayList<String> words;
 	private int numberOfThreads = 1000;
 	
+	private FileWriter fw;
+	private BufferedWriter bw;
+	
 	private void run() throws NoSuchAlgorithmException {
-		time = System.currentTimeMillis();
+		
+//		generatePassword(3);
 		
 		loadingFile();
 		System.out.println("Loading time: " + (System.currentTimeMillis() - time) / 1000.0 + " seconds");
-		//set length of the password from 3 to 8.
 		
 		final int k = words.size() / numberOfThreads;
-		len = 7;
+		len = 8;
 		
 		Thread[] threads = new Thread[numberOfThreads];
 		for (int i = 0; i < numberOfThreads; i++) {
@@ -59,22 +67,36 @@ public class sha1crack {
 			});
 			threads[i].start();
 		}
+		for (int i = 0; i < numberOfThreads; i++)
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
-		/*
-		for (int i = 6; i <= 6; i++) {
-			searchSpace = (long) Math.pow(20, i);
-			counting = 0;
-			System.out.println("Password length: " + i);
-			System.out.println("Search space: " + searchSpace);
-			
-			len = i;
-			searchPassword("");
-		}
-		*/
 		//qW5%N@
 		//qW5%N@((%
 		
+//		System.out.println(hashSHA1("WiwI+N8n"));
 		System.out.println("Run time: " + (System.currentTimeMillis() - time) / 60000.0 + " minutes");
+	}
+	
+	/*
+	 * Generate all password which length equals to params len
+	 */
+	private void generatePassword(int len) throws NoSuchAlgorithmException {
+		this.len = len;
+		try {
+			fw = new FileWriter("file" + len + ".txt");
+			bw = new BufferedWriter(fw);
+			searchPassword("");
+			
+			bw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadingFile() {
@@ -104,13 +126,14 @@ public class sha1crack {
 	private void searchPassword(String pw) throws NoSuchAlgorithmException {
 		if (found) return;
 		if (pw.length() == len) {
+			/*
 			counting++;
 			if (counting % 500000 == 0) {
 				System.out.println(counting);
 			}
+			*/
 			String h = hashSHA1(pw);
-//			System.out.println(pw);
-			if (target.endsWith(h)) {
+			if (target.equals(h)) {
 				System.out.println("PASSWORD is cracked: ");
 				System.out.println(pw);
 				found = true;

@@ -2,15 +2,17 @@
 #include "sha1.c"
 #include "sha1.h"
 
+using namespace std;
+
 SHA1Context sha;
 
 int password_length;
 
-int main(int argc, char *argv[]) 
+int main() 
 {
-    password_length = atoi(argv[0]);
+    cout << "I'm in C++ now"; 
+    cout << endl;
     
-    printf("Length = " + password_length);    
     
     return 0;  
 }
